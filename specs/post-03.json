@@ -8,21 +8,24 @@
       "heading": "1. ชิง <span class='hl-orange'>1,249</span> อัตรา!",
       "lines": [
         "ผู้มีสิทธิสอบ <span class='hl-blue'>133,422 คน</span>",
-        "(เปิดสอบ 121 เขต + สศศ.)"
+        "สนามสอบ 121 เขต + สศศ.",
+        "ม.ธรรมศาสตร์ ออกข้อสอบ!"
       ]
     },
     {
-      "heading": "2. วิชาเอกว่างมากที่สุด",
+      "heading": "2. วิชาเอกว่างมากสุด",
       "lines": [
-        "ประถม <span class='hl-pink'>184</span> <span class='sep'>|</span> ไทย <span class='hl-pink'>132</span> <span class='sep'>|</span> คณิต <span class='hl-pink'>110</span>",
-        "อังกฤษ <span class='hl-pink'>102</span> <span class='sep'>|</span> สังคม <span class='hl-pink'>99</span> อัตรา"
+        "ประถม <span class='hl-pink'>184</span> <span class='sep'>|</span> ภาษาไทย <span class='hl-pink'>132</span>",
+        "คณิต <span class='hl-pink'>110</span> <span class='sep'>|</span> อังกฤษ <span class='hl-pink'>102</span>",
+        "สังคมศึกษา <span class='hl-pink'>99 อัตรา</span>"
       ]
     },
     {
-      "heading": "3. ตารางสอบ พ.ย. 69",
+      "heading": "3. ตารางสอบ พ.ย. 2569",
       "lines": [
         "<span class='hl-blue'>14 พ.ย.</span> ภาค ก <span class='sep'>|</span> <span class='hl-blue'>15 พ.ย.</span> ภาค ข",
-        "<span class='hl-pink'>18 พ.ย.</span> ประกาศผล <span class='sep'>|</span> <span class='hl-orange'>30 พ.ย.</span> บรรจุครบ!"
+        "<span class='hl-pink'>18 พ.ย.</span> ประกาศผลข้อเขียน",
+        "ภายใน <span class='hl-orange'>30 พ.ย.</span> บรรจุครบ!"
       ]
     }
   ]
