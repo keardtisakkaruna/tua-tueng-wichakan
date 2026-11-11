@@ -1,0 +1,29 @@
+{
+  "blank_template": "/home/antigravity/keardtisakkaruna/tua-tueng-wichakan/images/template-3cards-digital-blank.jpg",
+  "top_pill": "✨ เพจตัวตึงวิชาการ สรุปด่วน! (ข่าว ก.ค.ศ. 10 พ.ย. 69)",
+  "headline_html": "<span class='hl-navy'>ก.ค.ศ. เปิดตัว</span> <span class='hl-orange'>ระบบ DPAS &amp; DSS</span>",
+  "mascot_badge": "⭐ เพจตัวตึงวิชาการ",
+  "cards": [
+    {
+      "heading": "1. ระบบ <span class='hl-blue'>DPAS</span> โฉมใหม่!",
+      "lines": [
+        "ประเมินผลปฏิบัติงานออนไลน์",
+        "<span class='hl-blue'>ลดเอกสารกระดาษ</span> โปร่งใส 100%"
+      ]
+    },
+    {
+      "heading": "2. ระบบ <span class='hl-green'>DSS</span> สายเรียนต่อ",
+      "lines": [
+        "เลื่อนเงินเดือนช่วง<span class='hl-pink'>ลาเรียนต่อ</span>",
+        "ฝึกอบรม / ทำวิจัย เช็กออนไลน์ไว!"
+      ]
+    },
+    {
+      "heading": "3. ดีเดย์นำร่องแล้ว!",
+      "lines": [
+        "ทดสอบจริง <span class='hl-orange'>57 รร.</span> (9-10 พ.ย. 69)",
+        "เก็บผลปรับปรุง <span class='hl-blue'>เตรียมขยายทั่วไทย!</span>"
+      ]
+    }
+  ]
+}

@@ -151,7 +151,7 @@ def build_html(spec: dict, zones: list) -> str:
       height: 1024px;
       overflow: hidden;
       background: #ffffff;
-      font-family: 'Kodchasan', 'Itim', sans-serif;
+      font-family: 'Mali', cursive;
       -webkit-font-smoothing: antialiased;
     }}
     .canvas {{
@@ -179,7 +179,7 @@ def build_html(spec: dict, zones: list) -> str:
       display: inline-block;
       background: #1E2B4F;
       color: #FEF08A;
-      font-family: 'Kodchasan', sans-serif;
+      font-family: 'Mali', cursive;
       font-weight: 700;
       font-size: 20px;
       padding: 5px 22px;
@@ -191,17 +191,17 @@ def build_html(spec: dict, zones: list) -> str:
       white-space: nowrap;
     }}
     .hero-title {{
-      font-family: 'Kodchasan', 'Itim', sans-serif;
+      font-family: 'Mali', cursive;
       font-weight: 700;
       font-size: 46px;
       line-height: 1.25;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.2px;
       filter: url(#sticker-hero);
       white-space: nowrap;
       padding: 4px 10px;
     }}
 
-    /* Card Typography — ZERO -webkit-text-stroke! Pure crisp fill + SVG sticker filter behind */
+    /* Card Typography — ZERO -webkit-text-stroke! Pure crisp Mali Bold + SVG sticker filter behind */
     .sticker-wrap {{
       filter: url(#sticker-card);
       display: flex;
@@ -209,21 +209,21 @@ def build_html(spec: dict, zones: list) -> str:
       align-items: center;
     }}
     .card-head {{
-      font-family: 'Kodchasan', sans-serif;
+      font-family: 'Mali', cursive;
       font-weight: 700;
       font-size: 31px;
       color: #172554;
-      line-height: 1.32;
+      line-height: 1.34;
       margin-bottom: 6px;
       white-space: nowrap;
       width: max-content;
     }}
     .card-body {{
-      font-family: 'Kodchasan', sans-serif;
+      font-family: 'Mali', cursive;
       font-weight: 700;
       font-size: 22.5px;
       color: #1E293B;
-      line-height: 1.48;
+      line-height: 1.5;
       white-space: nowrap;
       width: max-content;
     }}
@@ -245,7 +245,7 @@ def build_html(spec: dict, zones: list) -> str:
       left: 56px;
       background: rgba(30, 43, 79, 0.95);
       color: #FFFFFF;
-      font-family: 'Kodchasan', sans-serif;
+      font-family: 'Mali', cursive;
       font-weight: 700;
       font-size: 19px;
       padding: 6px 20px;
