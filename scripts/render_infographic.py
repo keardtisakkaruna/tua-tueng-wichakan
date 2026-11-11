@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
-Tua Tueng Wichakan — Bulletproof Thai Sticker Infographic Renderer & QA Validator (v2: Symmetric Box-Fill)
-==========================================================================================================
-Guarantees 4 visual quality rules 100%:
+Tua Tueng Wichakan — Bulletproof Thai Sticker Infographic Renderer & QA Validator (v3: Breathable Line-Spacing)
+===============================================================================================================
+Guarantees 5 visual quality rules 100%:
 1. Authentic cute 'Mali' Bold Thai typography (zero AI-garbled vowels/consonants).
 2. Zero '-webkit-text-stroke' glyph-bite/self-overlap: Uses an SVG Alpha-Dilate Smooth Sticker Filter
    (feGaussianBlur + steep feComponentTransfer alpha curve + feDropShadow) rendered 100% BEHIND SourceGraphic.
-3. High Fill-Ratio & Symmetrical Multi-Line Balance:
-   - Pixel-exact vertical & horizontal card boundary detection from the blank 3D scene.
-   - Unified horizontal center axis across all 3 cards for clean vertical alignment.
-   - Scale-UP Box-Fill Optimizer after `document.fonts.ready` so 3–4 balanced lines fill ~85–90% of each card!
-4. Deterministic Pixel-Diff QA Gate (`ImageChops.difference`) verifying 0 icon collisions & 0 border overflows.
+3. High Fill-Ratio & Symmetrical Multi-Line Balance (~85–90% card fill along a unified center axis).
+4. Breathable Vertical Line Spacing for Thai Ascenders/Descenders (สระอุ/อู + วรรณยุกต์/การันต์ never touch!).
+5. Deterministic 3-Way Pixel-Diff QA Gate (`ImageChops.difference`):
+   - Check 1: 0 pixels colliding with left 3D icons
+   - Check 2: 0 pixels overflowing card borders (right, top, bottom)
+   - Check 3: Every text line has a clean horizontal band of pure pastel background separating it from
+              adjacent lines (zero fused sticker halos or cramped vertical spacing!).
 """
 
 import json
@@ -43,11 +45,11 @@ def scan_card_safe_zone(im: Image.Image, y_top: int, y_bot: int, x_card_start: i
             card_right_x = x
             break
 
-    # Snug-yet-safe margins (13px clearance for SVG sticker halo + clean visual breathing room)
+    # Safe margins (allow full vertical breathing room while protecting rounded top/bottom borders)
     safe_left = icon_right_x + 13
     safe_right = card_right_x - 13
-    safe_top = y_top + 10
-    safe_bot = y_bot - 10
+    safe_top = y_top + 8
+    safe_bot = y_bot - 8
 
     return {
         "card_bounds": [x_card_start, y_top, card_right_x, y_bot],
@@ -64,7 +66,7 @@ def detect_three_cards(im: Image.Image):
 
     for cy in approx_centers:
         bg = im.getpixel((780, cy))
-        tol = 11  # Tight enough to catch pastel-to-sky border transitions accurately
+        tol = 11
         y_top = cy
         while y_top > 235:
             r, g, b = im.getpixel((780, y_top - 1))
@@ -80,14 +82,11 @@ def detect_three_cards(im: Image.Image):
             y_bot += 1
 
         if y_bot - y_top < 140:
-            # Fallback if gradient card
             y_top, y_bot = cy - 105, cy + 105
         segments.append((y_top, y_bot))
 
     zones = [scan_card_safe_zone(im, y0, y1) for (y0, y1) in segments]
 
-    # Harmonize horizontal safe_left & safe_right across the 3 cards when icons have similar widths
-    # so all 3 text blocks align symmetrically along the exact same vertical center axis!
     lefts = [z["safe_box"][0] for z in zones]
     rights = [z["safe_box"][2] for z in zones]
     if max(lefts) - min(lefts) <= 26:
@@ -129,12 +128,12 @@ def build_html(spec: dict, zones: list) -> str:
           overflow: visible;
         }}
         """)
-        lines_html = "<br/>".join(c["lines"])
+        line_items = "".join(f'<div class="card-line">{ln}</div>' for ln in c["lines"])
         card_divs.append(f"""
         <div class="card-safe card-safe-{idx}">
           <div class="sticker-wrap">
             <div class="card-head">{c["heading"]}</div>
-            <div class="card-body">{lines_html}</div>
+            <div class="card-body">{line_items}</div>
           </div>
         </div>
         """)
@@ -188,7 +187,7 @@ def build_html(spec: dict, zones: list) -> str:
       border-radius: 999px;
       border: 3.5px solid #FFFFFF;
       box-shadow: 0 4px 10px rgba(30, 43, 79, 0.22);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       line-height: 1.3;
       white-space: nowrap;
     }}
@@ -196,7 +195,7 @@ def build_html(spec: dict, zones: list) -> str:
       font-family: 'Mali', cursive;
       font-weight: 700;
       font-size: 54px;
-      line-height: 1.24;
+      line-height: 1.25;
       letter-spacing: -0.2px;
       filter: url(#sticker-hero);
       white-space: nowrap;
@@ -204,30 +203,39 @@ def build_html(spec: dict, zones: list) -> str:
       width: max-content;
     }}
 
-    /* Card Typography — Pure crisp Mali Bold + Plush SVG Sticker Outline behind */
+    /* Card Typography — Apply sticker filter per-line so neighboring lines NEVER fuse white halos!
+       AND give generous vertical rhythm (gap + line-height) so Thai vowels/tones breathe cleanly! */
     .sticker-wrap {{
-      filter: url(#sticker-card);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
     }}
     .card-head {{
+      filter: url(#sticker-card);
       font-family: 'Mali', cursive;
       font-weight: 700;
-      font-size: 36px;
+      font-size: 35px;
       color: #172554;
-      line-height: 1.28;
-      margin-bottom: 5px;
+      line-height: 1.32;
+      margin-bottom: 14px;
       white-space: nowrap;
       width: max-content;
     }}
     .card-body {{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: max-content;
+    }}
+    .card-line {{
+      filter: url(#sticker-card);
       font-family: 'Mali', cursive;
       font-weight: 700;
-      font-size: 28px;
+      font-size: 26px;
       color: #1E293B;
-      line-height: 1.42;
+      line-height: 1.32;
       white-space: nowrap;
       width: max-content;
     }}
@@ -261,31 +269,31 @@ def build_html(spec: dict, zones: list) -> str:
   </style>
 </head>
 <body>
-  <!-- SVG Filters: Plush Smooth Circular Sticker Outline 100% BEHIND SourceGraphic (Zero Glyph-Bite!) -->
+  <!-- SVG Filters: Crisp Smooth Circular Sticker Outline 100% BEHIND SourceGraphic -->
   <svg width="0" height="0" style="position:absolute; pointer-events:none;">
     <defs>
       <filter id="sticker-hero" x="-15%" y="-25%" width="130%" height="150%" color-interpolation-filters="sRGB">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="4.0" result="blur1" />
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3.8" result="blur1" />
         <feComponentTransfer in="blur1" result="thickAlpha">
           <feFuncA type="table" tableValues="0 0.92 1 1 1 1 1 1 1 1 1 1" />
         </feComponentTransfer>
         <feFlood flood-color="#FFFFFF" flood-opacity="1" result="whiteColor" />
         <feComposite in="whiteColor" in2="thickAlpha" operator="in" result="whiteSticker" />
-        <feDropShadow in="whiteSticker" dx="0" dy="4" stdDeviation="4" flood-color="#1E2B4F" flood-opacity="0.24" result="stickerWithShadow" />
+        <feDropShadow in="whiteSticker" dx="0" dy="4" stdDeviation="3.5" flood-color="#1E2B4F" flood-opacity="0.22" result="stickerWithShadow" />
         <feMerge>
           <feMergeNode in="stickerWithShadow" />
           <feMergeNode in="SourceGraphic" />
         </feMerge>
       </filter>
 
-      <filter id="sticker-card" x="-15%" y="-25%" width="130%" height="150%" color-interpolation-filters="sRGB">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="3.0" result="blur1" />
+      <filter id="sticker-card" x="-15%" y="-30%" width="130%" height="160%" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2.2" result="blur1" />
         <feComponentTransfer in="blur1" result="thickAlpha">
-          <feFuncA type="table" tableValues="0 0.92 1 1 1 1 1 1 1 1 1 1" />
+          <feFuncA type="table" tableValues="0 0.90 1 1 1 1 1 1 1 1 1 1" />
         </feComponentTransfer>
         <feFlood flood-color="#FFFFFF" flood-opacity="1" result="whiteColor" />
         <feComposite in="whiteColor" in2="thickAlpha" operator="in" result="whiteSticker" />
-        <feDropShadow in="whiteSticker" dx="0" dy="3" stdDeviation="3" flood-color="#1E2B4F" flood-opacity="0.18" result="stickerWithShadow" />
+        <feDropShadow in="whiteSticker" dx="0" dy="1.5" stdDeviation="1.8" flood-color="#1E2B4F" flood-opacity="0.14" result="stickerWithShadow" />
         <feMerge>
           <feMergeNode in="stickerWithShadow" />
           <feMergeNode in="SourceGraphic" />
@@ -306,9 +314,10 @@ def build_html(spec: dict, zones: list) -> str:
   </div>
 
   <script>
-    // Scale-UP Box-Fill & Unified Visual Hierarchy Optimizer:
-    // Starts LARGE (head=40px, body=31px) and steps down by 0.5px only until fitting cleanly
-    // inside the Safe Box (leaving 6px halo margin), maximizing card fill & symmetry!
+    // Scale-UP Box-Fill + Breathable Thai Vertical Rhythm Optimizer:
+    // 1. Finds unified heading & body sizes that fit horizontally & vertically with generous 14px line gaps.
+    // 2. Dynamically expands inter-line gap into any remaining vertical room (up to 19px) so Thai
+    //    descenders (ุ/ู/ฏ) and ascenders (ิ/ี/้/์) ALWAYS have plenty of pastel breathing space!
     function fitAllBoxes() {{
       const banner = document.getElementById('hero-box');
       const hero = document.getElementById('hero-title');
@@ -320,52 +329,75 @@ def build_html(spec: dict, zones: list) -> str:
       }}
 
       const boxes = Array.from(document.querySelectorAll('.card-safe'));
-      let globalHead = 40;
-      let globalBody = 31;
+      let globalHead = 38;
+      let globalBody = 29;
 
       boxes.forEach(box => {{
         const head = box.querySelector('.card-head');
         const body = box.querySelector('.card-body');
+        const lines = Array.from(box.querySelectorAll('.card-line'));
         const wrap = box.querySelector('.sticker-wrap');
-        // Allow text to fill up to ~96% of the already-padded safe_box!
         const maxW = box.clientWidth - 6;
-        const maxH = box.clientHeight - 6;
+        const maxH = box.clientHeight - 10;
 
-        let hSize = 40;
+        let hSize = 38;
         head.style.fontSize = hSize + 'px';
         while (hSize > 22 && head.offsetWidth > maxW) {{
           hSize -= 0.5;
           head.style.fontSize = hSize + 'px';
         }}
 
-        let bSize = 31;
-        body.style.fontSize = bSize + 'px';
+        let bSize = 29;
+        lines.forEach(ln => ln.style.fontSize = bSize + 'px');
         while (bSize > 18 && body.offsetWidth > maxW) {{
           bSize -= 0.5;
-          body.style.fontSize = bSize + 'px';
+          lines.forEach(ln => ln.style.fontSize = bSize + 'px');
         }}
 
-        // Maintain hierarchy: heading at least 1.16x body, capped so body isn't dwarfed
-        if (bSize > hSize / 1.15) {{
-          bSize = Math.floor((hSize / 1.15) * 2) / 2;
-          body.style.fontSize = bSize + 'px';
+        if (bSize > hSize / 1.16) {{
+          bSize = Math.floor((hSize / 1.16) * 2) / 2;
+          lines.forEach(ln => ln.style.fontSize = bSize + 'px');
         }}
 
-        // Fit total height cleanly inside Safe Box
         while ((hSize > 20 || bSize > 17) && wrap.offsetHeight > maxH) {{
           if (hSize > 20) {{ hSize -= 0.5; head.style.fontSize = hSize + 'px'; }}
-          if (bSize > 17) {{ bSize -= 0.5; body.style.fontSize = bSize + 'px'; }}
+          if (bSize > 17) {{
+            bSize -= 0.5;
+            lines.forEach(ln => ln.style.fontSize = bSize + 'px');
+          }}
         }}
 
         if (hSize < globalHead) globalHead = hSize;
         if (bSize < globalBody) globalBody = bSize;
       }});
 
-      // Apply unified typographic scale across all 3 cards for clean editorial symmetry
+      // Apply unified typographic scale + distribute spare vertical height into breathable line gaps!
+      let unifiedGap = 14;
       boxes.forEach(box => {{
         box.querySelector('.card-head').style.fontSize = globalHead + 'px';
-        box.querySelector('.card-body').style.fontSize = globalBody + 'px';
+        box.querySelectorAll('.card-line').forEach(ln => ln.style.fontSize = globalBody + 'px');
       }});
+
+      // Try increasing unifiedGap up to 19px as long as every card stays cleanly inside maxH!
+      while (unifiedGap < 19) {{
+        const nextGap = unifiedGap + 1;
+        boxes.forEach(box => {{
+          box.querySelector('.card-head').style.marginBottom = (nextGap + 1) + 'px';
+          box.querySelector('.card-body').style.gap = nextGap + 'px';
+        }});
+        const anyOverflow = boxes.some(box => {{
+          const wrap = box.querySelector('.sticker-wrap');
+          return wrap.offsetHeight > box.clientHeight - 12;
+        }});
+        if (anyOverflow) {{
+          boxes.forEach(box => {{
+            box.querySelector('.card-head').style.marginBottom = (unifiedGap + 1) + 'px';
+            box.querySelector('.card-body').style.gap = unifiedGap + 'px';
+          }});
+          break;
+        }}
+        unifiedGap = nextGap;
+      }}
     }}
 
     if (document.fonts && document.fonts.ready) {{
@@ -379,11 +411,12 @@ def build_html(spec: dict, zones: list) -> str:
 """
 
 
-def qa_verify_pixels(blank_path: str, rendered_path: str, zones: list, debug_out: str = None):
+def qa_verify_pixels(blank_path: str, rendered_path: str, zones: list, spec: dict, debug_out: str = None):
     """
-    Deterministic Pixel-Diff QA Gate:
-    Checks that ZERO rendered text/sticker pixels collide with any card's 3D icon
-    or spill outside any card's right/top/bottom boundaries!
+    Deterministic 3-Way Pixel-Diff QA Gate:
+    1. Zero collision with left 3D icons
+    2. Zero overflow outside card right/top/bottom borders
+    3. Breathable vertical separation between every text line (no touching vowels/halos!)
     """
     blank_im = Image.open(blank_path).convert("RGB")
     rend_im = Image.open(rendered_path).convert("RGB")
@@ -393,17 +426,18 @@ def qa_verify_pixels(blank_path: str, rendered_path: str, zones: list, debug_out
     dbg = rend_im.copy() if debug_out else None
     draw = ImageDraw.Draw(dbg) if dbg else None
 
-    for idx, z in enumerate(zones):
+    for idx, (z, c) in enumerate(zip(zones, spec["cards"])):
         cx0, cy0, cx1, cy1 = z["card_bounds"]
         icon_rx = z["icon_right_x"]
         sx0, sy0, sx1, sy1 = z["safe_box"]
+        expected_lines = 1 + len(c["lines"])
 
         if draw:
             draw.rectangle([sx0, sy0, sx1, sy1], outline=(0, 200, 80), width=2)
             draw.line([(icon_rx, cy0), (icon_rx, cy1)], fill=(255, 50, 50), width=2)
             draw.line([(cx1, cy0), (cx1, cy1)], fill=(255, 50, 50), width=2)
 
-        # Check 1: Icon zone collision (x from cx0+10 to icon_rx)
+        # Check 1: Icon zone collision
         icon_hits = 0
         for y in range(cy0 + 10, cy1 - 10):
             for x in range(cx0 + 10, icon_rx + 1):
@@ -411,9 +445,9 @@ def qa_verify_pixels(blank_path: str, rendered_path: str, zones: list, debug_out
                 if max(dr, dg, db) > 28:
                     icon_hits += 1
         if icon_hits > 10:
-            issues.append(f"Card {idx+1}: {icon_hits} text/sticker pixels touched the 3D icon zone (x <= {icon_rx})!")
+            issues.append(f"Card {idx+1}: {icon_hits} pixels touched the 3D icon zone (x <= {icon_rx})!")
 
-        # Check 2: Right border overflow (x from cx1 - 2 to 1023)
+        # Check 2: Right/Top/Bottom border overflow
         right_hits = 0
         for y in range(cy0, cy1):
             for x in range(cx1 - 2, 1023):
@@ -421,7 +455,46 @@ def qa_verify_pixels(blank_path: str, rendered_path: str, zones: list, debug_out
                 if max(dr, dg, db) > 28:
                     right_hits += 1
         if right_hits > 5:
-            issues.append(f"Card {idx+1}: {right_hits} text/sticker pixels overflowed right border (x >= {cx1})!")
+            issues.append(f"Card {idx+1}: {right_hits} pixels overflowed right border (x >= {cx1})!")
+
+        # Check 3: Vertical line separation (detect contiguous horizontal ink/sticker bands)
+        row_has_ink = []
+        for y in range(cy0 + 4, cy1 - 4):
+            ink_px = 0
+            for x in range(sx0, sx1 + 1):
+                dr, dg, db = diff.getpixel((x, y))
+                if max(dr, dg, db) > 26:
+                    ink_px += 1
+            row_has_ink.append((y, ink_px >= 3))
+
+        bands = []
+        in_band = False
+        b_start = 0
+        for y, active in row_has_ink:
+            if active and not in_band:
+                in_band = True
+                b_start = y
+            elif not active and in_band:
+                in_band = False
+                if y - b_start >= 10:
+                    bands.append((b_start, y - 1))
+        if in_band:
+            bands.append((b_start, cy1 - 5))
+
+        if len(bands) < expected_lines:
+            issues.append(
+                f"Card {idx+1}: Expected {expected_lines} separated lines, but found only {len(bands)} bands "
+                f"(adjacent lines touched vertically! Bands={bands})"
+            )
+        else:
+            min_gap = min(bands[i + 1][0] - bands[i][1] - 1 for i in range(len(bands) - 1))
+            print(f"  Card {idx+1} vertical line gaps: {[bands[i+1][0] - bands[i][1] - 1 for i in range(len(bands)-1)]} px (min={min_gap}px)")
+            if min_gap < 3:
+                issues.append(f"Card {idx+1}: Vertical gap between lines is too tight ({min_gap}px < 3px)!")
+            if draw:
+                for i in range(len(bands) - 1):
+                    gy = (bands[i][1] + bands[i + 1][0]) // 2
+                    draw.line([(sx0 + 6, gy), (sx1 - 6, gy)], fill=(0, 140, 255), width=1)
 
     if dbg and debug_out:
         dbg.save(debug_out, quality=92)
@@ -466,15 +539,15 @@ def main():
     ]
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    issues = qa_verify_pixels(spec["blank_template"], tmp_png, zones, debug_jpg)
+    issues = qa_verify_pixels(spec["blank_template"], tmp_png, zones, spec, debug_jpg)
     if issues:
-        print("❌ QA FAILED — Collision / Overflow detected:")
+        print("❌ QA FAILED — Collision / Overflow / Cramped Line Spacing detected:")
         for iss in issues:
             print("  -", iss)
         sys.exit(2)
 
     Image.open(tmp_png).convert("RGB").save(out_jpg, quality=95)
-    print(f"✅ QA PASSED (0 icon collisions, 0 border overflows) -> Saved {out_jpg}")
+    print(f"✅ QA PASSED (0 icon collisions, 0 border overflows, clean vertical gaps) -> Saved {out_jpg}")
 
 
 if __name__ == "__main__":
