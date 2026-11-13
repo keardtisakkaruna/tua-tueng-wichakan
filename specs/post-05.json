@@ -1,0 +1,32 @@
+{
+  "blank_template": "/home/antigravity/keardtisakkaruna/tua-tueng-wichakan/images/template-3cards-exam-blank.jpg",
+  "top_pill": "✨ เพจตัวตึงวิชาการ สรุปด่วน! (สพฐ. ชี้แจง 12 พ.ย. 69)",
+  "headline_html": "<span class='hl-orange'>เช็กด่วน!</span> <span class='hl-navy'>สอบ RT ป.1 &amp; NT ป.3</span>",
+  "mascot_badge": "⭐ เพจตัวตึงวิชาการ",
+  "cards": [
+    {
+      "heading": "1. สพฐ. ซักซ้อมศูนย์สอบ!",
+      "lines": [
+        "ประชุมออนไลน์ครบทุกเขต",
+        "เคาะแนวสอบ <span class='hl-blue'>ปีการศึกษา 69</span>",
+        "ยึดโครงสร้างข้อสอบชุดใหม่!"
+      ]
+    },
+    {
+      "heading": "2. กางปฏิทินสอบ ก.พ. 70",
+      "lines": [
+        "<span class='hl-pink'>RT ป.1</span> สอบ 17 ก.พ. 2570",
+        "<span class='hl-orange'>NT ป.3</span> สอบ 24 ก.พ. 2570",
+        "เช็กประกาศศูนย์สอบควบคู่!"
+      ]
+    },
+    {
+      "heading": "3. เตรียมระบบ <span class='hl-green'>NT Access</span>",
+      "lines": [
+        "ตรวจรายชื่อเด็กให้ถูกต้อง",
+        "เช็กผัง <span class='hl-blue'>Test Blueprint 69</span>",
+        "ระวังสับสนเอกสารปีสอบ!"
+      ]
+    }
+  ]
+}
