@@ -166,9 +166,9 @@ def build_html(spec: dict, zones: list) -> str:
     .top-banner {{
       position: absolute;
       left: 64px;
-      top: 50px;
+      top: 44px;
       width: 896px;
-      height: 158px;
+      height: 168px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -187,7 +187,7 @@ def build_html(spec: dict, zones: list) -> str:
       border-radius: 999px;
       border: 3.5px solid #FFFFFF;
       box-shadow: 0 4px 10px rgba(30, 43, 79, 0.22);
-      margin-bottom: 10px;
+      margin-bottom: 18px;
       line-height: 1.3;
       white-space: nowrap;
     }}

@@ -1,0 +1,32 @@
+{
+  "blank_template": "/home/antigravity/keardtisakkaruna/tua-tueng-wichakan/images/template-3cards-ai-policy-blank.jpg",
+  "top_pill": "✨ เพจตัวตึงวิชาการ สรุปด่วน! (ประชุม สพฐ. 13 พ.ย. 69)",
+  "headline_html": "<span class='hl-navy'>สพฐ. เร่งเครื่อง!</span> <span class='hl-orange'>5 นโยบายใหญ่ปี 70</span>",
+  "mascot_badge": "⭐ เพจตัวตึงวิชาการ",
+  "cards": [
+    {
+      "heading": "1. ดัน <span class='hl-blue'>AI</span> ช่วยลดภาระครู!",
+      "lines": [
+        "อบรมครูออกแบบการสอนใหม่",
+        "สร้าง <span class='hl-blue'>โรงเรียนแม่</span> ต้นแบบ AI",
+        "เชื่อมข้อมูล สพฐ. <span class='hl-orange'>23 ระบบ!</span>"
+      ]
+    },
+    {
+      "heading": "2. ยกเครื่อง <span class='hl-green'>ร.ร.ขนาดเล็ก</span>",
+      "lines": [
+        "กลุ่มเด็กไม่เกิน 50 คน",
+        "หนุนเรียนรวม <span class='hl-pink'>5,813 แห่ง</span>",
+        "แชร์ทรัพยากรภายในปี 2571!"
+      ]
+    },
+    {
+      "heading": "3. ยกระดับผู้นำ-ห้องเรียน",
+      "lines": [
+        "อบรม ผอ.เขต-รร. <span class='hl-orange'>12,409 คน</span>",
+        "เสริมทักษะคิดวิเคราะห์ <span class='hl-blue'>6 มิติ</span>",
+        "เชื่อมการสอนคู่การวัดผล!"
+      ]
+    }
+  ]
+}
